@@ -59,7 +59,8 @@ def softmaxCostAndGradient(predicted, target, outputVectors, dataset):
 
     ### YOUR CODE HERE
     # outputvectors : V x D / predicted : D
-    y_softmax = softmax(outputVectors.dot(predicted)) # V
+    z = outputVectors.dot(predicted)
+    y_softmax = softmax(z) # V
 
     cost = - np.log(y_softmax[target])
 
@@ -107,9 +108,10 @@ def negSamplingCostAndGradient(predicted, target, outputVectors, dataset,
     # outputvectors : V x D / predicted : D
     neg_idx = indices[1:]
 
-    z = outputVectors.dot(predicted)
-    ysig = sigmoid(z[target])
-    ysign = sigmoid(- z[neg_idx]).reshape(-1, 1)
+    z_t = outputVectors[target].dot(predicted)
+    z_n = outputVectors[neg_idx].dot(predicted)
+    ysig = sigmoid(z_t)
+    ysign = sigmoid(- z_n).reshape(-1, 1)
 
     cost = -np.log(ysig) - np.sum(np.log(ysign))
 
